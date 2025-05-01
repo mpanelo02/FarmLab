@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="experience">
+        <canvas id="experience-canvas"></canvas>
+    </div>
+    
+    <div class="modal hidden">
+        <div class="modal-wrapper">
+            <div class="modal-header">
+                <h1 class="modal-title">Dashboard</h1>
+                <button class="modal-exit-button">Exit</button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-content-wrapper">
+                    <a href="#" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="modal-visit-button hidden">View Link</a>
+                    <div class="modal-project-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum magnam unde deserunt quaerat minus repellat natus nobis qui tenetur ducimus fuga quo corrupti nam similique sint at suscipit, assumenda ipsa?</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@v0.149.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.149.0/examples/jsm/"
+          }
+        }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
