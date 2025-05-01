@@ -215,7 +215,9 @@ window.addEventListener( "pointermove", onPointerMove );
 
 
 function animate() {
-  controls.maxDistance = 20; // or whatever feels right
+  controls.enablePan = false;
+
+  controls.maxDistance = 25; // or whatever feels right
   controls.minDistance = 10;
 
 
