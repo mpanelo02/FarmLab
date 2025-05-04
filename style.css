@@ -94,3 +94,26 @@
     background-color: #4caf50;
     color: white;
 }
+.pumpPin {
+    position: fixed;
+    top: 120px;
+    right: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: #a8ffb0; /* Light green background */
+    border: 2px solid #4caf50;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: right;
+}
+
+.pumpPin:hover {
+    background-color: #4caf50;
+    color: white;
+}
+

@@ -75,25 +75,35 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
     </script>
-    <!-- <button class="fanPin">🌀ON</button> -->
-    <button id="fanToggleButton" class="fanPin">🌀ON</button>
+
+    <button id="fanToggleButton" class="fanPin">🥵OFF</button>
     <script>
         const fanToggleButton = document.getElementById("fanToggleButton");
         let isFanOn = true;
       
         fanToggleButton.addEventListener("click", () => {
           isFanOn = !isFanOn;
-          fanToggleButton.textContent = isFanOn ? "🌀ON" : "❌OFF";
+          fanToggleButton.textContent = isFanOn ? "🌀ON" : "🥵OFF";
         });
       </script>
-    <button id="bulbToggleButton" class="bulbLedPin">💡ON</button>
+    <button id="bulbToggleButton" class="bulbLedPin">🌚OFF</button>
     <script>
         const bulbToggleButton = document.getElementById("bulbToggleButton");
         let isBulbOn = true;
       
         bulbToggleButton.addEventListener("click", () => {
           isBulbOn = !isBulbOn;
-          bulbToggleButton.textContent = isBulbOn ? "💡ON" : "❌OFF";
+          bulbToggleButton.textContent = isBulbOn ? "🌞ON" : "🌚OFF";
+        });
+      </script>
+    <button id="pumpToggleButton" class="pumpPin">🌵OFF</button>
+    <script>
+        const pumpToggleButton = document.getElementById("pumpToggleButton");
+        let isPumpOn = true;
+      
+        pumpToggleButton.addEventListener("click", () => {
+          isPumpOn = !isPumpOn;
+          pumpToggleButton.textContent = isPumpOn ? "🌧️ON" : "🌵OFF";
         });
       </script>
       
