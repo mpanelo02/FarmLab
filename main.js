@@ -72,15 +72,24 @@ let intersectObject = "";
 const intersectObjects = [];
 const intersectObjectsNames = [
     "CCTV",
+    "Chain",
+    "ExhaustFan",
     "FCU",
-    // "Clock",
+    "Holder",
     "Monitor",
-    // "PlantLight",
+    "PipeDrain",
+    "PipeSupply",
+    "PlantBase",
     "Plate01",
     "Plate02",
-    // "Thermometer",
-    "Plant1",
-    "Plant2",
+    "Thermometer",
+    "WaterCon",
+    "WaterCon2",
+    "Clock",
+    "PlantLight",
+    "Outlet",
+    "Plant01",
+    "StrawBerry",
 ];
 
 const loader = new GLTFLoader();
@@ -188,7 +197,25 @@ function jumpPlants(meshID) {
 
   function onClick() {
     if(intersectObject !== ""){
-      if(["Plant1","Plant2","CCTV","FCU"].includes(intersectObject)){
+      if(["CCTV",
+    "Chain",
+    "ExhaustFan",
+    "FCU",
+    "Holder",
+    "Monitor",
+    "PipeDrain",
+    "PipeSupply",
+    "PlantBase",
+    "Plate01",
+    "Plate02",
+    "Thermometer",
+    "WaterCon",
+    "WaterCon2",
+    "Clock",
+    "PlantLight",
+    "Outlet",
+    "Plant01",
+    "StrawBerry"].includes(intersectObject)){
         jumpPlants(intersectObject);
       } else {
         showModal(intersectObject);

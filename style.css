@@ -49,3 +49,48 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.fanPin {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: #a8ffb0; /* Light green background */
+    border: 2px solid #4caf50;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: right;
+}
+
+.fanPin:hover {
+    background-color: #4caf50;
+    color: white;
+}
+.bulbLedPin {
+    position: fixed;
+    top: 70px;
+    right: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: #a8ffb0; /* Light green background */
+    border: 2px solid #4caf50;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: right;
+}
+
+.bulbLedPin:hover {
+    background-color: #4caf50;
+    color: white;
+}
