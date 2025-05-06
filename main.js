@@ -275,3 +275,109 @@ function animate() {
     renderer.render( scene, camera );
   }
   renderer.setAnimationLoop( animate );
+
+// Codes for Display of Time and Date
+  function updateDateTime() {
+    const now = new Date();
+
+    // const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = now.toLocaleDateString(undefined, optionsDate);
+
+    const formattedTime = now.toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
+    document.getElementById('vantaa-date').textContent = formattedDate;
+    document.getElementById('vantaa-clock').textContent = formattedTime;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+// Codes for Connection to Server and Buttons
+
+const client = mqtt.connect("wss://test.mosquitto.org:8081");
+
+const fanToggleButton = document.getElementById("fanToggleButton");
+const bulbToggleButton = document.getElementById("bulbToggleButton");
+const pumpToggleButton = document.getElementById("pumpToggleButton");
+
+let isFanOn = false;
+let isBulbOn = false;
+let isPumpOn = false;
+
+function updateButtonState(button, isOn, onLabel, offLabel) {
+  button.textContent = isOn ? onLabel : offLabel;
+}
+
+function updateFanButton(state) {
+  isFanOn = state === "ON";
+  updateButtonState(fanToggleButton, isFanOn, "🌀ON", "🥵OFF");
+}
+
+function updateBulbButton(state) {
+  isBulbOn = state === "ON";
+  updateButtonState(bulbToggleButton, isBulbOn, "🌞ON", "🌚OFF");
+}
+
+function updatePumpButton(state) {
+  isPumpOn = state === "ON";
+  updateButtonState(pumpToggleButton, isPumpOn, "🌧️ON", "🌵OFF");
+}
+
+client.on("connect", () => {
+  console.log("✅ Connected to MQTT broker");
+
+  // Subscribe to all topics
+  const topics = ["trial/fan", "trial/bulb", "trial/pump"];
+  topics.forEach(topic => {
+    client.subscribe(topic, err => {
+      if (!err) {
+        console.log(`📡 Subscribed to topic: ${topic}`);
+        // Request the retained message
+        client.publish(topic, "", { qos: 0, retain: false });
+      }
+    });
+  });
+});
+
+// Handle incoming messages
+client.on("message", (topic, message) => {
+  const msg = message.toString().trim();
+  console.log(`📥 ${topic}: ${msg}`);
+  if (msg !== "ON" && msg !== "OFF") return;
+
+  switch (topic) {
+    case "trial/fan":
+      updateFanButton(msg);
+      break;
+    case "trial/bulb":
+      updateBulbButton(msg);
+      break;
+    case "trial/pump":
+      updatePumpButton(msg);
+      break;
+  }
+});
+
+// Button click events to toggle and publish new state
+fanToggleButton.addEventListener("click", () => {
+  const newState = isFanOn ? "OFF" : "ON";
+  client.publish("trial/fan", newState);
+  updateFanButton(newState);
+});
+
+bulbToggleButton.addEventListener("click", () => {
+  const newState = isBulbOn ? "OFF" : "ON";
+  client.publish("trial/bulb", newState);
+  updateBulbButton(newState);
+});
+
+pumpToggleButton.addEventListener("click", () => {
+  const newState = isPumpOn ? "OFF" : "ON";
+  client.publish("trial/pump", newState);
+  updatePumpButton(newState);
+})

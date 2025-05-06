@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 </head>
 <body>
     <div id="experience">
@@ -44,68 +47,23 @@
     <script type="module" src="./main.js"></script>
         <!-- Place these first so the elements are available -->
     <!-- Date -->
-    <div id="vantaa-date-container" style="position: fixed; top: 20px; left: 30px; font-size: 30px; color: black; font-weight: bold; z-index: 9999; font-family: Arial, sans-serif; text-align: right;">
+    <div id="vantaa-date-container" style="position: fixed; top: 20px; left: 30px; font-size: 20px; color: black; font-weight: bold; z-index: 9999; font-family: Arial, sans-serif; text-align: right;">
         <div id="vantaa-date">Loading date...</div>
     </div>
 
     <!-- Time -->
-    <div id="vantaa-time-container" style="position: fixed; top: 70px; left: 30px; font-size: 30px; color: black; font-weight: bold; z-index: 9999; font-family: Arial, sans-serif; text-align: right;">
+    <div id="vantaa-time-container" style="position: fixed; top: 50px; left: 30px; font-size: 20px; color: black; font-weight: bold; z-index: 9999; font-family: Arial, sans-serif; text-align: right;">
         <div id="vantaa-clock">Loading time...</div>
     </div>
 
-    <!-- Move this script AFTER the elements are created -->
-    <script>
-        function updateDateTime() {
-        const now = new Date();
-  
-        // const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
-        const formattedDate = now.toLocaleDateString(undefined, optionsDate);
-  
-        const formattedTime = now.toLocaleTimeString(undefined, {
-            hour: '2-digit',
-            minute: '2-digit',
-            // second: '2-digit'
-        });
-  
-        document.getElementById('vantaa-date').textContent = formattedDate;
-        document.getElementById('vantaa-clock').textContent = formattedTime;
-        }
-  
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-    </script>
-
     <button id="fanToggleButton" class="fanPin">🥵OFF</button>
-    <script>
-        const fanToggleButton = document.getElementById("fanToggleButton");
-        let isFanOn = true;
-      
-        fanToggleButton.addEventListener("click", () => {
-          isFanOn = !isFanOn;
-          fanToggleButton.textContent = isFanOn ? "🌀ON" : "🥵OFF";
-        });
-      </script>
+
     <button id="bulbToggleButton" class="bulbLedPin">🌚OFF</button>
-    <script>
-        const bulbToggleButton = document.getElementById("bulbToggleButton");
-        let isBulbOn = true;
-      
-        bulbToggleButton.addEventListener("click", () => {
-          isBulbOn = !isBulbOn;
-          bulbToggleButton.textContent = isBulbOn ? "🌞ON" : "🌚OFF";
-        });
-      </script>
+
     <button id="pumpToggleButton" class="pumpPin">🌵OFF</button>
-    <script>
-        const pumpToggleButton = document.getElementById("pumpToggleButton");
-        let isPumpOn = true;
-      
-        pumpToggleButton.addEventListener("click", () => {
-          isPumpOn = !isPumpOn;
-          pumpToggleButton.textContent = isPumpOn ? "🌧️ON" : "🌵OFF";
-        });
-      </script>
+
+
+
       
 </body>
 </html>
