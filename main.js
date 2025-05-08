@@ -198,16 +198,16 @@ function jumpPlants(meshID) {
   function onClick() {
     if(intersectObject !== ""){
       if(["CCTV",
-    "Chain",
+    // "Chain",
     "ExhaustFan",
     "FCU",
-    "Holder",
-    "Monitor",
-    "PipeDrain",
-    "PipeSupply",
+    // "Holder",
+    // "Monitor",
+    // "PipeDrain",
+    // "PipeSupply",
     "PlantBase",
-    "Plate01",
-    "Plate02",
+    // "Plate01",
+    // "Plate02",
     "Thermometer",
     "WaterCon",
     "WaterCon2",
@@ -304,10 +304,12 @@ const client = mqtt.connect("wss://test.mosquitto.org:8081");
 const fanToggleButton = document.getElementById("fanToggleButton");
 const bulbToggleButton = document.getElementById("bulbToggleButton");
 const pumpToggleButton = document.getElementById("pumpToggleButton");
+const doorToggleButton = document.getElementById("doorToggleButton");
 
 let isFanOn = false;
 let isBulbOn = false;
 let isPumpOn = false;
+let isDoorOn = false;
 
 function updateButtonState(button, isOn, onLabel, offLabel) {
   button.textContent = isOn ? onLabel : offLabel;
@@ -327,12 +329,17 @@ function updatePumpButton(state) {
   isPumpOn = state === "ON";
   updateButtonState(pumpToggleButton, isPumpOn, "🌧️ON", "🌵OFF");
 }
+function updateDoorButton(state) {
+  isDoorOn = state === "ON";
+  updateButtonState(doorToggleButton, isDoorOn, "🔒 🚪", "🔓 🚪");
+}
 
 client.on("connect", () => {
   console.log("✅ Connected to MQTT broker");
 
   // Subscribe to all topics
-  const topics = ["trial/fan", "trial/bulb", "trial/pump"];
+  const topics = ["trial/fan", "trial/bulb", "trial/pump", "trial/door", "trial/temperature", "trial/humidity"];
+
   topics.forEach(topic => {
     client.subscribe(topic, err => {
       if (!err) {
@@ -348,20 +355,34 @@ client.on("connect", () => {
 client.on("message", (topic, message) => {
   const msg = message.toString().trim();
   console.log(`📥 ${topic}: ${msg}`);
-  if (msg !== "ON" && msg !== "OFF") return;
 
-  switch (topic) {
-    case "trial/fan":
-      updateFanButton(msg);
-      break;
-    case "trial/bulb":
-      updateBulbButton(msg);
-      break;
-    case "trial/pump":
-      updatePumpButton(msg);
-      break;
+  if (["trial/fan", "trial/bulb", "trial/pump", "trial/door"].includes(topic)) {
+    if (msg !== "ON" && msg !== "OFF") return;
+
+    switch (topic) {
+      case "trial/fan":
+        updateFanButton(msg);
+        break;
+      case "trial/bulb":
+        updateBulbButton(msg);
+        break;
+      case "trial/pump":
+        updatePumpButton(msg);
+        break;
+      case "trial/door":
+        updateDoorButton(msg);
+        break;
+    }
+  }
+
+  // Handle temperature and humidity
+  if (topic === "trial/temperature") {
+    document.getElementById("temperature-value").textContent = msg;
+  } else if (topic === "trial/humidity") {
+    document.getElementById("humidity-value").textContent = msg;
   }
 });
+
 
 // Button click events to toggle and publish new state
 fanToggleButton.addEventListener("click", () => {
@@ -380,4 +401,10 @@ pumpToggleButton.addEventListener("click", () => {
   const newState = isPumpOn ? "OFF" : "ON";
   client.publish("trial/pump", newState);
   updatePumpButton(newState);
+})
+
+doorToggleButton.addEventListener("click", () => {
+  const newState = isDoorOn ? "OFF" : "ON";
+  client.publish("trial/door", newState);
+  updateDoorButton(newState);
 })
