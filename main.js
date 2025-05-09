@@ -24,17 +24,17 @@ const modalContent = {
     Monitor: {
         title: "Dashboard",
         content: "This is a monitor.",
-        link:"https://app.arduino.cc/dashboards/0e94a058-54ba-44d2-9a9b-afba19e24e85",
+        link:"https://www.youtube.com/watch?v=0Jbd98ePAoA",
     },
     Plate01: {
         title: "LinkedIn",
         content: "Bio.",
-        link:"https://www.youtube.com",
+        link:"https://www.linkedin.com/in/mark-johnson-panelo-82030a325/",
     },
     Plate02: {
         title: "About",
         content: "Digital Twin Information.",
-        link:"https://www.youtube.com",
+        link:"https://www.metropolia.fi/en/rdi/collaboration-platforms/urbanfarmlab",
     },
 };
 
