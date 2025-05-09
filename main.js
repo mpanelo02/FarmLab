@@ -338,7 +338,7 @@ client.on("connect", () => {
   console.log("✅ Connected to MQTT broker");
 
   // Subscribe to all topics
-  const topics = ["trial/fan", "trial/bulb", "trial/pump", "trial/door", "trial/temperature", "trial/humidity", "trial/moisture", "trial/nutrients"];
+  const topics = ["trial/fan", "trial/bulb", "trial/pump", "trial/door", "trial/temperature", "trial/humidity", "trial/moisture", "trial/nutrients", "trial/waterLevel"];
 
   topics.forEach(topic => {
     client.subscribe(topic, err => {
@@ -384,6 +384,8 @@ client.on("message", (topic, message) => {
     document.getElementById("moisture-value").textContent = msg;
   } else if (topic === "trial/nutrients") {
     document.getElementById("nutrients-value").textContent = msg;
+  } else if (topic === "trial/waterLevel") {
+    document.getElementById("waterLevel-value").textContent = msg;
   }
 });
 
