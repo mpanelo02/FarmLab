@@ -24,7 +24,7 @@ const modalContent = {
     Monitor: {
         title: "Dashboard",
         content: "This is a monitor.",
-        link:"https://www.youtube.com/watch?v=0Jbd98ePAoA",
+        link:"https://www.youtube.com",
     },
     Plate01: {
         title: "LinkedIn",
