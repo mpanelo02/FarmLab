@@ -338,7 +338,7 @@ client.on("connect", () => {
   console.log("✅ Connected to MQTT broker");
 
   // Subscribe to all topics
-  const topics = ["trial/fan", "trial/bulb", "trial/pump", "trial/door", "trial/temperature", "trial/humidity", "trial/moisture", "trial/waterLevel"];
+  const topics = ["trial/fan", "trial/bulb", "trial/pump", "trial/door", "trial/temperature", "trial/humidity", "trial/moisture", "trial/waterLevel", "trial/motion"];
 
   topics.forEach(topic => {
     client.subscribe(topic, err => {
@@ -381,9 +381,16 @@ client.on("message", (topic, message) => {
   } else if (topic === "trial/humidity") {
     document.getElementById("humidity-value").textContent = msg;
   } else if (topic === "trial/moisture") {
-    document.getElementById("moisture-value").textContent = msg;
+    document.getElementById("moisture-value").textContent = Math.floor(((4096-msg)/2495)*100);
   } else if (topic === "trial/waterLevel") {
     document.getElementById("waterLevel-value").textContent = msg;
+  } else if (topic === "trial/motion") {
+    document.getElementById("motion-value").textContent = msg;
+    if (msg === "1") {
+      document.getElementById("motion-value").textContent = "-🚶‍♂️-";
+    } else {
+      document.getElementById("motion-value").textContent = "- -";
+    }
   }
 });
 
