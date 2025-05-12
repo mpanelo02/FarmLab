@@ -20,6 +20,7 @@ renderer.shadowMap.enabled = true;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1;
 
+
 const modalContent = {
     Monitor: {
         title: "Dashboard",
@@ -92,18 +93,83 @@ const intersectObjectsNames = [
     "StrawBerry",
 ];
 
+// Loading screen and loading manager
+// See: https://threejs.org/docs/#api/en/loaders/managers/LoadingManager
+const loadingScreen = document.getElementById("loadingScreen");
+const enterButton = document.querySelector(".enter-button");
+
+const manager = new THREE.LoadingManager();
+
+manager.onLoad = function () {
+  const t1 = gsap.timeline();
+
+  t1.to(enterButton, {
+    opacity: 1,
+    duration: 0,
+  });
+};
+
+enterButton.addEventListener("click", () => {
+  gsap.to(loadingScreen, {
+    opacity: 0,
+    duration: 2,
+    onComplete: () => {
+      loadingScreen.remove();
+      document.getElementById("mainContent").style.display = "block";
+    },
+  });
+});
+
+
+
 const loader = new GLTFLoader();
 
-loader.load( './FarmLab_Model02.glb', function ( glb ) {
+loader.load( './FarmLab_Model03.glb', function ( glb ) {
   glb.scene.traverse((child) => {
     if (intersectObjectsNames.includes(child.name)) {
         intersectObjects.push(child);
     }
+
+    // HIDE specific objects
+    if (["ColdWind1", "ColdWind2", "Water1", "Water2", "Area1", "Area2", "Area3", "Area4", "Area5", "Area6", "Area7", "Area8", "Spot1", "Spot2", "Spot3", "Spot4", "Spot5", "Spot6", "Spot7", "Spot8"].includes(child.name)) {
+      child.visible = false;
+    }
+
+    if (child.name === "Water1") {
+      water1 = child;
+      water1.visible = false;
+    }
+    if (child.name === "Water2") {
+      water2 = child;
+      water2.visible = false;
+    }
+
+    if (child.name === "ColdWind1") {
+      coldWind1 = child;
+      coldWind1.visible = false;
+    }
+    if (child.name === "ColdWind2") {
+      coldWind2 = child;
+      coldWind2.visible = false;
+    }
+
+
     if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
         // child.material.metalness = 0.2;
     }
+
+    if (["Area1", "Area2", "Area3", "Area4", "Area5", "Area6", "Area7", "Area8", "Spot1", "Spot2", "Spot3", "Spot4", "Spot5", "Spot6", "Spot7", "Spot8"].includes(child.name)) {
+      if (child.isLight) {
+        child.color.set(0xffc0cb); // soft pink
+        child.intensity = 1.5;      // tweak as needed
+
+        if ('distance' in child) child.distance = 20; // for PointLight/SpotLight
+        
+      }
+    }
+
     // console.log(child);
   });
   scene.add( glb.scene );
@@ -127,10 +193,11 @@ sun.shadow.camera.bottom = -50;
 sun.shadow.normalBias = 0.2;
 scene.add( sun );
 
+
 const light = new THREE.AmbientLight( 0x404040, 5 ); // soft white light
 scene.add( light );
 
-const aspect = sizes.width / sizes.height;
+// const aspect = sizes.width / sizes.height;
 
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000 );
 camera.position.set(13.3, 4.4, 12.8);
@@ -197,23 +264,24 @@ function jumpPlants(meshID) {
 
   function onClick() {
     if(intersectObject !== ""){
-      if(["CCTV",
+      if([
+    // "CCTV",
     // "Chain",
-    "ExhaustFan",
-    "FCU",
+    // "ExhaustFan",
+    // "FCU",
     // "Holder",
     // "Monitor",
     // "PipeDrain",
     // "PipeSupply",
-    "PlantBase",
+    // "PlantBase",
     // "Plate01",
     // "Plate02",
-    "Thermometer",
-    "WaterCon",
-    "WaterCon2",
-    "Clock",
-    "PlantLight",
-    "Outlet",
+    // "Thermometer",
+    // "WaterCon",
+    // "WaterCon2",
+    // "Clock",
+    // "PlantLight",
+    // "Outlet",
     "Plant01",
     "StrawBerry"].includes(intersectObject)){
         jumpPlants(intersectObject);
@@ -244,17 +312,17 @@ window.addEventListener( "pointermove", onPointerMove );
 function animate() {
   controls.enablePan = false;
 
-  controls.maxDistance = 25; // or whatever feels right
+  controls.maxDistance = 55; // or whatever feels right
   controls.minDistance = 10;
 
 
   // Vertical limits (up/down)
-  controls.minPolarAngle = THREE.MathUtils.degToRad(35); // 45° down
-  controls.maxPolarAngle = THREE.MathUtils.degToRad(90); // 135° = 45° up
+  controls.minPolarAngle = THREE.MathUtils.degToRad(35); // 35° down
+  controls.maxPolarAngle = THREE.MathUtils.degToRad(90); // 90° up
 
   // Horizontal limits (left/right)
-  controls.minAzimuthAngle = THREE.MathUtils.degToRad(5); // 45° left
-  controls.maxAzimuthAngle = THREE.MathUtils.degToRad(85);  // 45° right
+  controls.minAzimuthAngle = THREE.MathUtils.degToRad(5); // 5° left
+  controls.maxAzimuthAngle = THREE.MathUtils.degToRad(85);  // 85° right
 
 
   raycaster.setFromCamera( pointer, camera );
@@ -315,20 +383,96 @@ function updateButtonState(button, isOn, onLabel, offLabel) {
   button.textContent = isOn ? onLabel : offLabel;
 }
 
+// function updateFanButton(state) {
+//   isFanOn = state === "ON";
+//   updateButtonState(fanToggleButton, isFanOn, "🌀ON", "🥵OFF");
+// }
+
+let coldWind1 = null;
+let coldWind2 = null;
+let coldWindToggleInterval = null;
 function updateFanButton(state) {
   isFanOn = state === "ON";
   updateButtonState(fanToggleButton, isFanOn, "🌀ON", "🥵OFF");
+
+  if (isFanOn) {
+    let toggle = false;
+    if (coldWindToggleInterval) clearInterval(coldWindToggleInterval);
+    coldWindToggleInterval = setInterval(() => {
+      if (coldWind1 && coldWind2) {
+        toggle = !toggle;
+        coldWind1.visible = toggle;
+        coldWind2.visible = !toggle;
+      }
+    }, 500);
+  } else {
+    if (coldWindToggleInterval) clearInterval(coldWindToggleInterval);
+    coldWindToggleInterval = null;
+    if (coldWind1) coldWind1.visible = false;
+    if (coldWind2) coldWind2.visible = false;
+  }
 }
+
+// function updateBulbButton(state) {
+//   isBulbOn = state === "ON";
+//   updateButtonState(bulbToggleButton, isBulbOn, "🌞ON", "🌚OFF");
+// }
 
 function updateBulbButton(state) {
   isBulbOn = state === "ON";
   updateButtonState(bulbToggleButton, isBulbOn, "🌞ON", "🌚OFF");
+
+  const lightNames = [
+    "Area1", "Area2", "Area3", "Area4", "Area5", "Area6", "Area7", "Area8",
+    "Spot1", "Spot2", "Spot3", "Spot4", "Spot5", "Spot6", "Spot7", "Spot8"
+  ];
+
+  lightNames.forEach(name => {
+    const lightObj = scene.getObjectByName(name);
+    if (lightObj) {
+      lightObj.visible = isBulbOn;
+      if (lightObj.isLight) {
+        lightObj.color.set("#ff1493"); // 💖 Solid/Deep Pink
+        lightObj.intensity = 5;
+        if ('distance' in lightObj) lightObj.distance = 10;
+        
+      }
+    }
+  });
 }
 
+
+
+// function updatePumpButton(state) {
+//   isPumpOn = state === "ON";
+//   updateButtonState(pumpToggleButton, isPumpOn, "🌧️ON", "🌵OFF");
+// }
+
+let water1 = null;
+let water2 = null;
+let waterToggleInterval = null;
 function updatePumpButton(state) {
   isPumpOn = state === "ON";
   updateButtonState(pumpToggleButton, isPumpOn, "🌧️ON", "🌵OFF");
+
+  if (isPumpOn) {
+    let toggle = false;
+    if (waterToggleInterval) clearInterval(waterToggleInterval);
+    waterToggleInterval = setInterval(() => {
+      if (water1 && water2) {
+        toggle = !toggle;
+        water1.visible = toggle;
+        water2.visible = !toggle;
+      }
+    }, 500);
+  } else {
+    if (waterToggleInterval) clearInterval(waterToggleInterval);
+    waterToggleInterval = null;
+    if (water1) water1.visible = false;
+    if (water2) water2.visible = false;
+  }
 }
+
 function updateDoorButton(state) {
   isDoorOn = state === "ON";
   updateButtonState(doorToggleButton, isDoorOn, "🔒 🚪", "🔓 🚪");
