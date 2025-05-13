@@ -127,7 +127,7 @@ let clockHandLong = null;
 
 const loader = new GLTFLoader();
 
-loader.load( './FarmLab_Model03.glb', function ( glb ) {
+loader.load( './FarmLab_Model04.glb', function ( glb ) {
   glb.scene.traverse((child) => {
     if (intersectObjectsNames.includes(child.name)) {
         intersectObjects.push(child);
