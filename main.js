@@ -121,6 +121,9 @@ enterButton.addEventListener("click", () => {
 });
 
 
+let exhaustFan = null;
+let clockHandShort = null;
+let clockHandLong = null;
 
 const loader = new GLTFLoader();
 
@@ -134,7 +137,7 @@ loader.load( './FarmLab_Model03.glb', function ( glb ) {
     if (["ColdWind1", "ColdWind2", "Water1", "Water2", "Area1", "Area2", "Area3", "Area4", "Area5", "Area6", "Area7", "Area8", "Spot1", "Spot2", "Spot3", "Spot4", "Spot5", "Spot6", "Spot7", "Spot8"].includes(child.name)) {
       child.visible = false;
     }
-
+    // For the animation of the water and cold wind
     if (child.name === "Water1") {
       water1 = child;
       water1.visible = false;
@@ -152,6 +155,18 @@ loader.load( './FarmLab_Model03.glb', function ( glb ) {
       coldWind2 = child;
       coldWind2.visible = false;
     }
+
+    // For the animation of Exhaust Fan and Clock
+    if (child.name === "ExhaustFan") {
+        exhaustFan = child;
+    }
+    if (child.name === "ClockHandShort") {
+        clockHandShort = child;
+    }
+    if (child.name === "ClockHandLong") {
+        clockHandLong = child;
+    }
+
 
 
     if (child.isMesh) {
@@ -312,7 +327,7 @@ window.addEventListener( "pointermove", onPointerMove );
 function animate() {
   controls.enablePan = false;
 
-  controls.maxDistance = 55; // or whatever feels right
+  controls.maxDistance = 30; // or whatever feels right
   controls.minDistance = 10;
 
 
@@ -339,6 +354,16 @@ function animate() {
 	for ( let i = 0; i < intersects.length; i ++ ) {
         intersectObject = intersects[0].object.parent.name;
 	}
+
+  if (exhaustFan) {
+  exhaustFan.rotation.y += 0.08; // Adjust speed as needed
+  }
+  if (clockHandShort) {
+  clockHandShort.rotation.y -= 0.0001; // Adjust speed as needed
+  }
+  if (clockHandLong) {
+  clockHandLong.rotation.y -= 0.001; // Adjust speed as needed
+  }
 
     renderer.render( scene, camera );
   }
