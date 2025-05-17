@@ -22,11 +22,11 @@ renderer.toneMappingExposure = 1;
 
 
 const modalContent = {
-    Monitor: {
-        title: "Dashboard",
-        content: "This is a monitor.",
-        link:"https://www.youtube.com",
-    },
+    // Monitor: {
+    //     title: "Dashboard",
+    //     content: "This is a monitor.",
+    //     link:"https://www.youtube.com",
+    // },
     Plate01: {
         title: "LinkedIn",
         content: "Bio.",
@@ -66,7 +66,6 @@ function showModal(id){
 function hideModal(){
     modal.classList.toggle("hidden");
 }
-
 
 
 let intersectObject = "";
@@ -110,6 +109,7 @@ manager.onLoad = function () {
 };
 
 enterButton.addEventListener("click", () => {
+
   gsap.to(loadingScreen, {
     opacity: 0,
     duration: 2,
@@ -127,7 +127,7 @@ let clockHandLong = null;
 
 const loader = new GLTFLoader();
 
-loader.load( './FarmLab_Model04.glb', function ( glb ) {
+loader.load( './FarmLab_Model05.glb', function ( glb ) {
   glb.scene.traverse((child) => {
     if (intersectObjectsNames.includes(child.name)) {
         intersectObjects.push(child);
@@ -184,6 +184,7 @@ loader.load( './FarmLab_Model04.glb', function ( glb ) {
         
       }
     }
+
 
     // console.log(child);
   });
@@ -306,11 +307,7 @@ function jumpPlants(meshID) {
     }
   }
 
-// function onClick( event ) {
-//     if (intersectObject !=="") {
-//         showModal(intersectObject);
-//     }
-// }
+
 
 function onPointerMove( event ) {
 	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -397,21 +394,17 @@ const client = mqtt.connect("wss://test.mosquitto.org:8081");
 const fanToggleButton = document.getElementById("fanToggleButton");
 const bulbToggleButton = document.getElementById("bulbToggleButton");
 const pumpToggleButton = document.getElementById("pumpToggleButton");
-const doorToggleButton = document.getElementById("doorToggleButton");
+// const doorToggleButton = document.getElementById("doorToggleButton");
 
 let isFanOn = false;
 let isBulbOn = false;
 let isPumpOn = false;
-let isDoorOn = false;
+// let isDoorOn = false;
 
 function updateButtonState(button, isOn, onLabel, offLabel) {
   button.textContent = isOn ? onLabel : offLabel;
 }
 
-// function updateFanButton(state) {
-//   isFanOn = state === "ON";
-//   updateButtonState(fanToggleButton, isFanOn, "🌀ON", "🥵OFF");
-// }
 
 let coldWind1 = null;
 let coldWind2 = null;
@@ -438,10 +431,6 @@ function updateFanButton(state) {
   }
 }
 
-// function updateBulbButton(state) {
-//   isBulbOn = state === "ON";
-//   updateButtonState(bulbToggleButton, isBulbOn, "🌞ON", "🌚OFF");
-// }
 
 function updateBulbButton(state) {
   isBulbOn = state === "ON";
@@ -468,11 +457,6 @@ function updateBulbButton(state) {
 
 
 
-// function updatePumpButton(state) {
-//   isPumpOn = state === "ON";
-//   updateButtonState(pumpToggleButton, isPumpOn, "🌧️ON", "🌵OFF");
-// }
-
 let water1 = null;
 let water2 = null;
 let waterToggleInterval = null;
@@ -498,10 +482,10 @@ function updatePumpButton(state) {
   }
 }
 
-function updateDoorButton(state) {
-  isDoorOn = state === "ON";
-  updateButtonState(doorToggleButton, isDoorOn, "🔒 🚪", "🔓 🚪");
-}
+// function updateDoorButton(state) {
+//   isDoorOn = state === "ON";
+//   updateButtonState(doorToggleButton, isDoorOn, "🔒 🚪", "🔓 🚪");
+// }
 
 client.on("connect", () => {
   console.log("✅ Connected to MQTT broker");
@@ -538,9 +522,9 @@ client.on("message", (topic, message) => {
       case "trial/pump":
         updatePumpButton(msg);
         break;
-      case "trial/door":
-        updateDoorButton(msg);
-        break;
+      // case "trial/door":
+      //   updateDoorButton(msg);
+      //   break;
     }
   }
 
@@ -583,8 +567,8 @@ pumpToggleButton.addEventListener("click", () => {
   updatePumpButton(newState);
 })
 
-doorToggleButton.addEventListener("click", () => {
-  const newState = isDoorOn ? "OFF" : "ON";
-  client.publish("trial/door", newState);
-  updateDoorButton(newState);
-})
+// doorToggleButton.addEventListener("click", () => {
+//   const newState = isDoorOn ? "OFF" : "ON";
+//   client.publish("trial/door", newState);
+//   updateDoorButton(newState);
+// })

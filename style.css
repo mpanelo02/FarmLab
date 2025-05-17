@@ -154,14 +154,14 @@
     background-color: #4caf50;
     color: white;
 }
-.doorPin {
+/* .doorPin {
     position: fixed;
     top: 170px;
     right: 30px;
     font-size: 20px;
     font-weight: bold;
     color: black;
-    background-color: #a8ffb0; /* Light green background */
+    background-color: #a8ffb0; 
     border: 2px solid #4caf50;
     padding: 5px 10px;
     border-radius: 10px;
@@ -175,5 +175,5 @@
 .doorPin:hover {
     background-color: #4caf50;
     color: white;
-}
+} */
 
